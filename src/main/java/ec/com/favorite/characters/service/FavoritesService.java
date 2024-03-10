@@ -1,6 +1,7 @@
 package ec.com.favorite.characters.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -8,8 +9,7 @@ import org.springframework.stereotype.Service;
 import ec.com.favorite.characters.domain.FavoritesEntity;
 import ec.com.favorite.characters.domain.FavoritesIdEntity;
 import ec.com.favorite.characters.repository.FavoritesRepository;
-import ec.com.favorite.characters.service.dto.RequestUpdateDto;
-import jakarta.persistence.EntityExistsException;
+import ec.com.favorite.characters.service.dto.RequestDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,30 +18,22 @@ public class FavoritesService {
 
 	private final FavoritesRepository favoritesRepository;
 
-	public void save(String usermane, Integer id) {
-		FavoritesIdEntity favoritesIdEntity = new FavoritesIdEntity();
-		favoritesIdEntity.setUsermane(usermane);
-		favoritesIdEntity.setId(id);
-
-		if (favoritesRepository.existsById(favoritesIdEntity)) {
-			throw new EntityExistsException("Ya existe");
-		}
-
-		FavoritesEntity entity = new FavoritesEntity();
-		entity.setId(favoritesIdEntity);
-		entity.setState("ACT");
-
-		favoritesRepository.save(entity);
-	}
-
-	public void update(RequestUpdateDto req) {
+	public void createOrUpdate(RequestDto req) {
 		FavoritesIdEntity favoritesIdEntity = new FavoritesIdEntity();
 		favoritesIdEntity.setUsermane(req.getUser());
 		favoritesIdEntity.setId(req.getId());
 
-		FavoritesEntity entity = favoritesRepository.getReferenceById(favoritesIdEntity);
-		entity.setState(req.isActive() ? "ACT" : "INA");
-		favoritesRepository.save(entity);
+		Optional<FavoritesEntity> entityExist = favoritesRepository.findById(favoritesIdEntity);
+		if (entityExist.isPresent()) {
+			entityExist.get().setState(entityExist.get().getState().equals("ACT") ? "INA" : "ACT");
+			favoritesRepository.save(entityExist.get());
+		} else {
+			FavoritesEntity entityNew = new FavoritesEntity();
+			entityNew.setId(favoritesIdEntity);
+			entityNew.setState("ACT");
+			favoritesRepository.save(entityNew);
+		}
+
 	}
 
 	public List<Integer> findAllStateACT(String usermane) {

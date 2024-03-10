@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +24,6 @@ public class ControlExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(EntityNotFoundException.class)
 	private ResponseEntity<Object> handlerEntityNotFoundException(EntityNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND.value())
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString()).body(ex.getMessage());
-	}
-	
-	@ExceptionHandler(EntityExistsException.class)
-	private ResponseEntity<Object> handlerEntityExistsException(EntityExistsException ex) {
-		return ResponseEntity.status(HttpStatus.CONFLICT.value())
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString()).body(ex.getMessage());
 	}
 
