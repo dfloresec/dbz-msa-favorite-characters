@@ -1,7 +1,9 @@
 package ec.com.favorite.characters.domain;
 
+import org.hibernate.annotations.NamedQuery;
+
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,11 +19,13 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQuery(name = "FavoritesEntity.findAllStateACT",
+query = "select u from FavoritesEntity u where u.id.usermane = ?1 and u.state = 'ACT'")
 public class FavoritesEntity {
 
-	@Id
-	Integer id;
+	@EmbeddedId
+	FavoritesIdEntity id;
 
-	
+	String state;
 
 }
