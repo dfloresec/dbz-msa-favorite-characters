@@ -23,5 +23,11 @@ public class FavoritesListController {
 	private List<GaleryDto> getFavorities(@PathVariable(name = "user") String user) {
 		return charactersService.getFavorities(user);
 	}
+	
+	@GetMapping(value = "/allWithFavorites/{user}")
+	@ResponseStatus(HttpStatus.OK)
+	private List<GaleryDto> allWithFavorites(@PathVariable(name = "user") String user) {
+		return charactersService.allWithFavorites(user);
+	}
 
 }

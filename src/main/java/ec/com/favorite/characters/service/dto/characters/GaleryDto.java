@@ -18,5 +18,7 @@ public class GaleryDto {
 	private String ki;
 
 	private String image;
+	
+	private boolean favorite = false;
 
 }

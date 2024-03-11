@@ -1,5 +1,6 @@
 package ec.com.favorite.characters.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,20 @@ public class CharactersService {
 			log.error("Error", e);
 			return null;
 		}
+	}
+
+	public List<GaleryDto> allWithFavorites(String usermane) {
+		List<GaleryDto> all = charactersRepository.getCharacters();
+		List<Integer> idsFavorities = favoritesService.findAllStateACT(usermane);
+
+		List<GaleryDto> result = new ArrayList<>();
+		for (GaleryDto galeryDto : all) {
+			if (idsFavorities.contains(galeryDto.getId())) {
+				galeryDto.setFavorite(true);
+			}
+			result.add(galeryDto);
+		}
+		return result;
 	}
 
 }
