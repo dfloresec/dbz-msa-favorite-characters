@@ -31,6 +31,7 @@ public class CharactersService {
 			List<GaleryDto> result = all.stream()
 					.filter(itemAll -> idsFavorities.stream().anyMatch(itemFav -> itemFav.equals(itemAll.getId())))
 					.collect(Collectors.toList());
+			log.info(result.size() + " favoritos obtenidos.");
 			return result;
 		} catch (Exception e) {
 			log.error("Error", e);
