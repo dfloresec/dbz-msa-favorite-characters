@@ -1,5 +1,4 @@
-FROM openjdk:17-jdk-slim-buster
-VOLUME /tmp
+FROM openjdk:17-jdk-alpine
+ADD build/libs/dbz-msa-favorite-characters-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8082
-ADD ./build/libs/dbz-msa-favorite-characters-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT [ "java" , "-jar", "/app.jar"]
+ENTRYPOINT ["java","-jar", "app.jar"]
